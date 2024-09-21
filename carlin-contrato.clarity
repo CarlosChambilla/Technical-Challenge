@@ -1,0 +1,23 @@
+
+(define-constant carlin-key 'SP1SZW44M23GW6CXYD6TN9G00VBN2NPS841TA6WGJ)
+
+(define-data-var counter int 0)
+
+(define-read-only (get-counter)
+  (var-get counter))
+
+
+(define-public (increment-counter)
+  (if (is-eq tx-sender carlin-key)
+      (begin
+        (var-set counter (+ (var-get counter) 1)) 
+        (ok (var-get counter))) 
+      (err "Acceso denegado"))) 
+
+
+(define-public (reset-counter)
+  (if (is-eq tx-sender carlin-key)
+      (begin
+        (var-set counter 0) 
+        (ok (var-get counter))) 
+      (err "Acceso denegado"))) 
