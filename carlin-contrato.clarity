@@ -1,23 +1,23 @@
-
+;; definimos la key de carlin
 (define-constant carlin-key 'SP1SZW44M23GW6CXYD6TN9G00VBN2NPS841TA6WGJ)
-
+;; inicializamos el contador para validar el contrato 
 (define-data-var counter int 0)
-
+# leermos el valor del contrato
 (define-read-only (get-counter)
   (var-get counter))
 
-
+;; Incrementamos el contador, solo para la key de carlin
 (define-public (increment-counter)
   (if (is-eq tx-sender carlin-key)
       (begin
         (var-set counter (+ (var-get counter) 1)) 
-        (ok (var-get counter))) 
-      (err "Acceso denegado"))) 
+        (ok (var-get counter)))
+      (err "Acceso denegado"))) ;; Acceso denegado si el que ejecuta el código no es el propietario de la key
 
 
-(define-public (reset-counter)
+(define-public (reset-counter) ;; Reseteamos el contador
   (if (is-eq tx-sender carlin-key)
       (begin
         (var-set counter 0) 
         (ok (var-get counter))) 
-      (err "Acceso denegado"))) 
+      (err "Acceso denegado"))) ;; Acceso denegado si no es el propietario, y asi hasta se repite el bucle.
